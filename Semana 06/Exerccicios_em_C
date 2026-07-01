@@ -1,0 +1,35 @@
+Caderno de Exercícios Práticos: Operadores em Linguagem C
+
+Este repositório documenta a execução e análise do caderno de exercícios práticos baseado no arquivo `exercicios_operadores_c_2.md`. O objetivo deste material é consolidar o entendimento prático sobre o comportamento dos operadores estruturais da Linguagem C, prevenindo erros clássicos de lógica e efeitos indefinidos no compilador.
+
+Metodologia de Aplicação
+
+O estudo dos programas-base contidos em `exercicios_operadores_c_2.md` seguiu um fluxo de validação analítica:
+1. Resolução Analítica: Leitura atenta dos códigos de cada grupo com resolução manual das perguntas teóricas e tabelas de rastreio.
+2. Simulação Dinâmica: Execução passo a passo dos programas utilizando a plataforma PythonTutor para C (<https://pythontutor.com/c.html>).
+3. Mapeamento de Desvios: Comparação dos resultados previstos manualmente com o comportamento real das variáveis na memória, anotando correções conceituais.
+
+Estrutura do Conteúdo Programático
+
+Os exercícios estão divididos em quatro grandes áreas de competência computacional:
+
+Grupo 1: Operadores Aritméticos
+* Operadores analisados: `+`, `-`, `*`, `/`, `%`, `++`, `--`.
+* Conceitos absorvidos: A mecânica da divisão inteira (onde o resultado entre dois `int` é truncado em direção ao zero), o comportamento do operador módulo (`%`) com números negativos e a distinção de precedência entre pré-incremento (`++x`) e pós-incremento (`x++`).
+
+Grupo 2: Operadores Relacionais
+* Operadores analisados: `==`, `!=`, `<`, `>`, `<=`, `>=`.
+* Conceitos absorvidos: A compreensão de que expressões relacionais retornam valores inteiros binários (`0` para falso ou `1` para verdadeiro), a comparação de caracteres utilizando a tabela ASCII e a identificação do bug clássico de atribuição acidental (`=`) em estruturas condicionais `if`.
+
+Grupo 3: Operadores Lógicos
+* Operadores analisados: `&&`, `||`, `!`.
+* Conceitos absorvidos: A definição booleana nativa de C (onde zero é considerado falso e qualquer valor diferente de zero é interpretado como verdadeiro), a normalização de valores lógicos via negação dupla (`!!n`) e a otimização por curto-circuito em expressões condicionais complexas.
+
+Grupo 4: Operadores Bit a Bit (Bitwise)
+* Operadores analisados: `&`, `|`, `^`, `~`, `<<`, `>>`.
+* Conceitos absorvidos: Manipulação a nível de bits individuais sobre tipos inteiros. Estudo de aplicações práticas como máscaras de bits para setar (`|=`), limpar (`&= ~`) e fazer toggle (`^=`) de flags de controle, além do uso de deslocamento de bits para multiplicação ou divisão por potências de 2.
+
+Ferramentas de Apoio Utilizadas
+
+* PythonTutor (Ambiente C): Utilizado para inspecionar os frames da pilha de execução e acompanhar graficamente a transição de estado das variáveis.
+* Gabarito de Verificação: Confronto das respostas fechadas com o gabarito oficial fornecido no encerramento do caderno para homologação dos resultados.
