@@ -1,0 +1,37 @@
+# Caderno de Exercícios Práticos: Microdados do PDAD 2024 — Distrito Federal
+
+Este repositório documenta a execução e análise do caderno de exercícios práticos baseado no arquivo `exercicios_operadores_c_2.md`, adaptando a lógica algorítmica para a manipulação de dados socioeconômicos reais extraídos da Pesquisa Distrital por Amostra de Domicílios Ampliada (PDAD-A 2024) do Distrito Federal. O objetivo deste material é integrar os conceitos de estruturas de dados e controle de fluxo ao ecossistema de análise de dados em Python.
+
+Metodologia de Aplicação e Estrutura dos Dados
+
+A análise foi estruturada sob o modelo de tabelas relacionadas do ecossistema do Instituto de Pesquisa e Estatística do Distrito Federal (IPEDF), utilizando arquivos parciais como `moradores_parcial.csv`, `domicilios_parcial.xlsx` e o `dicionario_de_variaveis_pdad_2024.xlsx`. 
+
+O fluxo de trabalho foi baseado em três diretrizes fundamentais:
+1. Compreensão Relacional: Conexão lógica entre as tabelas de domicílios e moradores por meio da chave comum `A01nficha`.
+2. Tratamento de Dados: Identificação e filtragem manual de códigos de ausência ou omissão de resposta, tais como `99999` (não se aplica) e `88888` (não declarado).
+3. Abstração Estatística: Trabalho voltado para contagens simples e agregação de dados por localidade das Regiões Administrativas (RAs) presentes na amostra.
+
+Estrutura do Conteúdo Programático
+
+Os exercícios práticos propostos estão estruturados em quatro níveis progressivos de complexidade computacional:
+
+Nível 1: Trivial — Manipulação Inicial de DataFrames
+Exercícios:Lendo os dados (1.1), Selecionando colunas (1.2), Contando moradores por domicílio (1.3) e Exibindo idades (1.4).
+Conceitos absorvidos:Importação de pacotes, manipulação inicial de arquivos estruturados através do Pandas (`read_csv`, `read_excel`), métodos de inspeção dimensional (`shape`, `head`) e filtragem booleana básica para descarte de valores nulos.
+
+Nível 2: Básico — Agregações e Filtros Estruturais
+Exercícios:Calculando a idade média (2.1), Contando por escolaridade (2.2), Filtrando por Região Administrativa (2.3) e Renda dos moradores declarantes (2.4)
+Conceitos absorvidos: Aplicação prática de lógica aritmética com laços `for` para cálculos acumulados de médias (evitando métodos prontos como `.mean()`), criação de dicionários de mapeamento categórico e aplicação de filtros combinados com operadores lógicos (`&`).
+
+Nível 3: Intermediário — Algoritmos de Ordenação Manual
+Exercícios:Ordenando por idade via Bubble Sort (3.1), Ordenando por renda via Selection Sort (3.2), Ordenando por nome de RA via Insertion Sort (3.3) e Comparando algoritmos de ordenação (3.4).
+Conceitos absorvidos: Implementação em código puro de estruturas clássicas de ordenação com complexidade (n^2). Mapeamento de métricas empíricas de eficiência através da contagem manual de trocas (*swaps*) e comparações de vetores sob diferentes estados de ordenação prévia.
+
+Nível 4: Avançado — Interfaces de Linha de Comando (CLI)
+Exercícios: Relatório em TXT por linha de comando (4.1), Relatório interativo com menu (4.2) e Programa completo com argumento de RA (4.3).
+Conceitos absorvidos:Construção de utilitários de terminal funcionais usando argumentos do sistema via `sys.argv`, manipulação e persistência de buffers de texto através de `open()`, modularização estrutural em funções e controle de estado interativo com laços `while` infinito e tratamento de entradas (`input()`).
+
+Ferramentas e Bibliotecas Utilizadas
+
+Pandas: Biblioteca de código aberto utilizada para a estruturação inicial dos dados textuais e tabulares
+Sys: Módulo nativo do Python aplicado no controle e captura de parâmetros diretos passados pelo terminal de comando
