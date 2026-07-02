@@ -1,1 +1,17 @@
+          INP         //input
+          STA LIMITE  //salvar o input na variavel limite//
+          LDA ZERO    //escrever zero// 
+LOOP      STA COUNT   //Armazena o valor atual do acumulador em count//  //inicio do loop//
+          OUT         //output//     
+          SUB LIMITE  //Subtrai o valor de limite do acumulador//
+          BRZ FIM     //se o resultado for 0 ir pro fim//
+          LDA COUNT   //se o resultado não for 0 ler a variavel count//
+          ADD ONE     //adicionar um na variavel count//
+          BRA LOOP    //reiniciar o loop// 
+          HLT         //finalizar o programa//
 
+
+LIMITE    DAT
+COUNT     DAT
+ZERO      DAT 0
+ONE       DAT 1
