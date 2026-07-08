@@ -1,0 +1,127 @@
+# Sistema PDAD 2024 - Trabalho e Ocupação no DF
+
+Este sistema foi desenvolvido em Python com interface gráfica usando Tkinter.  
+O objetivo do projeto é permitir a exploração dos dados da população ocupada do Distrito Federal a partir dos microdados da PDAD 2024.  
+O usuário pode filtrar os dados por localidade/RA, ocupação e sexo, visualizar estatísticas descritivas, gerar gráficos e exportar os resultados.  
+O sistema também permite comparar duas Regiões Administrativas lado a lado no mesmo gráfico.
+
+# Recorte temático
+
+Recorte E — Trabalho e ocupação
+
+Pergunta central:
+
+Como se distribui a população ocupada no Distrito Federal? Quais setores ou posições de ocupação predominam?
+
+O sistema analisa informações relacionadas a trabalho, renda, escolaridade, sexo, idade e localidade.
+
+# Funcionalidades do sistema
+
+O sistema possui as seguintes funcionalidades:
+
+- leitura do arquivo moradores.csv;
+- limpeza dos valores sentinela 99999, 88888 e 77777;
+- filtro por Localidade / RA;
+- filtro por Ocupação;
+- filtro por Sexo;
+- gráfico de distribuição da população ocupada por sexo;
+- gráfico de renda média por escolaridade;
+- comparação entre duas RAs no mesmo gráfico;
+- exibição de estatísticas descritivas;
+- tabela com amostra dos dados filtrados;
+- exportação dos dados filtrados em arquivo .csv;
+- exportação das estatísticas em arquivo .txt.
+
+# Como executar
+
+Para executar o sistema, abra o terminal na pasta do projeto e digite:
+
+> python sistema.py
+
+Ao executar o comando, será aberta uma janela com a interface gráfica do sistema.
+
+# Dependências
+
+O sistema utiliza as seguintes bibliotecas:
+
+pip install pandas matplotlib
+
+Também são usadas bibliotecas padrão do Python:
+
+- tkinter
+- filedialog
+- messagebox
+
+# Arquivos necessários
+
+Para o funcionamento do sistema, os seguintes arquivos devem estar na mesma pasta:
+
+sistema.py
+moradores.csv
+
+O arquivo moradores.csv corresponde aos microdados de moradores da PDAD 2024.
+
+# Variáveis utilizadas
+
+As principais variáveis utilizadas no sistema são:
+
+
+ localidade     | Código da localidade ou Região Administrativa
+ E03            | Sexo do morador
+ idade_calculada| Idade do morador
+ escolaridade   | Nível de escolaridade
+ I04            | Indica se a pessoa trabalhou nos últimos 30 dias
+ I13            | Posição na ocupação
+ renda_ind      | Renda individual
+
+# População ocupada
+
+O sistema considera como população ocupada apenas os registros em que a variável I04 possui valor igual a 1.
+
+Essa variável indica se a pessoa trabalhou nos últimos 30 dias.
+
+# Gráficos disponíveis
+
+O sistema permite visualizar três tipos principais de gráficos:
+
+1. Distribuição por sexo  
+   Mostra a quantidade de pessoas ocupadas do sexo masculino e feminino.
+
+2. Renda média por escolaridade 
+   Mostra a relação entre nível de escolaridade e renda média individual.
+
+3. Comparação entre duas RAs  
+   Permite selecionar duas Regiões Administrativas e comparar os dados lado a lado no mesmo gráfico.
+
+# Estatísticas exibidas
+
+Para o recorte selecionado, o sistema exibe:
+
+- quantidade de registros;
+- renda média individual;
+- renda mediana individual;
+- idade média;
+- sexo mais frequente;
+- ocupação mais frequente.
+
+# Exportação
+
+O usuário pode exportar:
+
+- os dados filtrados em formato .csv;
+- as estatísticas do recorte em formato .txt.
+
+A exportação é feita pela própria interface gráfica usando uma janela de diálogo para escolher o local de salvamento.
+
+# Organização do código
+
+O código foi organizado em funções para facilitar a leitura e manutenção.  
+Entre as principais funções estão:
+
+- carregar_dados();
+- limpar_dados();
+- criar_rotulos();
+- atualizar_filtro();
+- gerar_grafico();
+- exportar_dados();
+- exportar_estatisticas().
