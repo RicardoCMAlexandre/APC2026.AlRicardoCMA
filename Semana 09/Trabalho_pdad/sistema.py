@@ -5,13 +5,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# VARIAVEL ----------
+#VARIAVEL ----------
 ARQUIVO_MORADORES = "moradores.csv"
-
-# VARIEVEL ----------
 VALORES_SENTINELA = [99999, 88888, 77777]
 
-# VARIAVEIS FILTRADAS ----------
 df_original = None
 df_moradores = None
 df_filtrado = None
@@ -19,7 +16,6 @@ canvas_grafico = None
 
 # FUNCAO CONVERTER PONTO VIRGULA -----
 def converter_para_numero(serie):
-  
     return pd.to_numeric(
         serie.astype(str).str.replace(",", ".", regex=False),
         errors="coerce"
@@ -27,20 +23,19 @@ def converter_para_numero(serie):
 
 # FUNCAO ABRI ARQUIVO PDAD/ TRANSFORMA NUMEROS ---
 def carregar_dados():
-    
     df = pd.read_csv(ARQUIVO_MORADORES, sep=None, engine="python")
 
-    # PRIMEIRA COLUNA
+    # PROBLEMA - PRIMEIRA COLUNA DO XLSX
     df.columns = df.columns.str.replace("\ufeff", "", regex=False)
 
     colunas_numericas = [
-    "localidade",
-    "idade_calculada",
-    "E03",
-    "escolaridade",
-    "I04",
-    "I13",
-    "renda_ind"
+        "localidade",
+        "idade_calculada",
+        "E03",
+        "escolaridade",
+        "I04",
+        "I13",
+        "renda_ind"
     ]
 
     for coluna in colunas_numericas:
@@ -56,13 +51,12 @@ def limpar_dados(df):
     df_limpo = df.copy()
 
     colunas_usadas = [
-    "localidade",
-    "idade_calculada",
-    "E03",
-    "escolaridade",
-    "I04",
-    "I13",
-    "renda_ind"
+        "localidade",
+        "idade_calculada",
+        "E03",
+        "escolaridade",
+        "I04",
+        "I13"
     ]
 
     for coluna in colunas_usadas:
@@ -77,13 +71,12 @@ def limpar_dados(df):
 
 # FUNCAO TROCA NOME / FAZ ROTULO
 def criar_rotulos(df):
-    
     df_rotulado = df.copy()
 
     mapa_genero = {
-    1: "Masculino",
-    2: "Feminino"
-}
+        1: "Masculino",
+        2: "Feminino"
+    }
 
     mapa_ocupacao = {
         1: "Empregado no setor público",
@@ -172,16 +165,23 @@ def criar_rotulos(df):
 
     return df_rotulado
 
+# PROBLEMA DE TIRAR RENDA ---
+def obter_renda_valida(df):
+    renda_valida = df[
+        ~df["renda_ind"].isin(VALORES_SENTINELA)
+    ]["renda_ind"].dropna()
+
+    return renda_valida
+
 # FUNCAO DO FILTRO ----------
 def atualizar_filtro():
-    
     global df_filtrado
 
-    # 3 topicos (+ 3)
+  # 3 topicos (+ 3)
     localidade_escolhida = combo_localidade.get()
     ocupacao_escolhida = combo_ocupacao.get()
     sexo_escolhido = combo_sexo.get()
-    
+
     df_filtrado = df_moradores.copy()
 
     if localidade_escolhida != "Todas":
@@ -205,7 +205,6 @@ def atualizar_filtro():
 
 # FUNCAO DE ATUALIZACAO DAS ESTATITISCAS
 def atualizar_estatisticas():
-    
     total = len(df_filtrado)
 
     if total == 0:
@@ -214,8 +213,15 @@ def atualizar_estatisticas():
         )
         return
 
-    renda_media = df_filtrado["renda_ind"].mean()
-    renda_mediana = df_filtrado["renda_ind"].median()
+    renda_valida = obter_renda_valida(df_filtrado)
+
+    if len(renda_valida) > 0:
+        renda_media = renda_valida.mean()
+        renda_mediana = renda_valida.median()
+    else:
+        renda_media = 0
+        renda_mediana = 0
+
     idade_media = df_filtrado["idade_calculada"].mean()
 
     genero_principal = df_filtrado["genero_nome"].mode()
@@ -247,7 +253,6 @@ def atualizar_estatisticas():
 # REVER
 # ATUALIZADO (+3 GRAFICOS)
 def gerar_grafico():
-    
     global canvas_grafico
 
     if canvas_grafico is not None:
@@ -276,18 +281,22 @@ def gerar_grafico():
             eixo.set_ylabel("Quantidade de pessoas")
 
     elif tipo_grafico == "Renda média por escolaridade":
-        if len(df_filtrado) == 0:
+        dados_renda = df_filtrado[
+            ~df_filtrado["renda_ind"].isin(VALORES_SENTINELA)
+        ].dropna(subset=["renda_ind"])
+
+        if len(dados_renda) == 0:
             eixo.text(
                 0.5,
                 0.5,
-                "Nenhum dado encontrado para os filtros selecionados.",
+                "Nenhum dado de renda válido encontrado para os filtros selecionados.",
                 ha="center",
                 va="center"
             )
             eixo.set_axis_off()
         else:
             renda_por_escolaridade = (
-                df_filtrado
+                dados_renda
                 .groupby("escolaridade_nome")["renda_ind"]
                 .mean()
                 .sort_values()
@@ -313,7 +322,6 @@ def gerar_grafico():
             eixo.set_axis_off()
         else:
             dados_comparacao = df_moradores.copy()
-
             if combo_ocupacao.get() != "Todas":
                 dados_comparacao = dados_comparacao[
                     dados_comparacao["ocupacao_nome"] == combo_ocupacao.get()
@@ -369,7 +377,6 @@ def gerar_grafico():
 
 
 def atualizar_tabela():
-    
     for item in tabela.get_children():
         tabela.delete(item)
 
@@ -385,6 +392,13 @@ def atualizar_tabela():
     amostra = df_filtrado[colunas_exibidas].head(50)
 
     for _, linha in amostra.iterrows():
+        renda = linha["renda_ind"]
+
+        if pd.isna(renda) or renda in VALORES_SENTINELA:
+            renda_texto = "Sem renda válida"
+        else:
+            renda_texto = f"R$ {renda:.2f}"
+
         tabela.insert(
             "",
             "end",
@@ -394,13 +408,12 @@ def atualizar_tabela():
                 int(linha["idade_calculada"]),
                 linha["escolaridade_nome"],
                 linha["ocupacao_nome"],
-                f"R$ {linha['renda_ind']:.2f}"
+                renda_texto
             )
         )
 
 #FUNCAO PARA EXPORTAR ARQUIVO CVS
 def exportar_dados():
-    
     if df_filtrado is None or len(df_filtrado) == 0:
         messagebox.showwarning("Exportação", "Não há dados para exportar.")
         return
@@ -417,7 +430,7 @@ def exportar_dados():
 
 #FUNCAO PARA EXPORTAR TXT
 def exportar_estatisticas():
-    
+    """Exporta as estatísticas do filtro atual para TXT."""
     if df_filtrado is None or len(df_filtrado) == 0:
         messagebox.showwarning("Exportação", "Não há estatísticas para exportar.")
         return
@@ -446,7 +459,6 @@ def exportar_estatisticas():
 
 #FUNCAO REBUT DOS FILTROS
 def limpar_filtros():
-    
     combo_localidade.set("Todas")
     combo_ocupacao.set("Todas")
     combo_sexo.set("Todos")
@@ -463,11 +475,11 @@ def limpar_filtros():
         combo_ra2.set(valores_ra[0])
 
     atualizar_filtro()
-
+  
 # -----------------
 # PROGRAMA PRICIPAL
 # -----------------
-    
+
 try:
     df_original = carregar_dados()
     df_moradores = limpar_dados(df_original)
@@ -501,13 +513,12 @@ descricao = tk.Label(
         "Este sistema permite explorar dados da população ocupada do Distrito Federal "
         "a partir da PDAD 2024. O usuário pode filtrar por localidade, ocupação e sexo, "
         "visualizar estatísticas de renda e idade, comparar duas RAs no mesmo gráfico "
-        "e exportar os resultados"
-        " (feito por Ricardo Carvalho Muniz Alexandre)"
+        "e exportar os resultados. "
+        "Feito por Ricardo Carvalho Muniz Alexandre."
     ),
     wraplength=950,
     justify="center"
 )
-
 descricao.pack(pady=5)
 
 label_registros = tk.Label(
@@ -547,7 +558,6 @@ combo_localidade = ttk.Combobox(
 )
 combo_localidade.set("Todas")
 combo_localidade.grid(row=0, column=1, padx=5, pady=5)
-
 
 tk.Label(frame_filtros, text="Ocupação:").grid(
     row=1, column=0, padx=5, pady=5, sticky="w"
@@ -714,7 +724,7 @@ tabela.column("Gênero", width=130)
 tabela.column("Idade", width=70)
 tabela.column("Escolaridade", width=180)
 tabela.column("Ocupação", width=180)
-tabela.column("Renda", width=110)
+tabela.column("Renda", width=130)
 
 barra_vertical = ttk.Scrollbar(
     frame_tabela,
