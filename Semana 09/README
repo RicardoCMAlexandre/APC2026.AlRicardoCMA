@@ -125,3 +125,5 @@ Entre as principais funções estão:
 - gerar_grafico();
 - exportar_dados();
 - exportar_estatisticas().
+
+Para acessar aos microdados moradores: https://pdad.ipe.df.gov.br
