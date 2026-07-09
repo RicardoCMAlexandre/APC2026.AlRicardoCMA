@@ -322,6 +322,7 @@ def gerar_grafico():
             eixo.set_axis_off()
         else:
             dados_comparacao = df_moradores.copy()
+
             if combo_ocupacao.get() != "Todas":
                 dados_comparacao = dados_comparacao[
                     dados_comparacao["ocupacao_nome"] == combo_ocupacao.get()
@@ -346,27 +347,16 @@ def gerar_grafico():
                 )
                 eixo.set_axis_off()
             else:
-                tabela_comparacao = pd.crosstab(
-                    dados_comparacao["genero_nome"],
+                contagem_ras = (
                     dados_comparacao["localidade_nome"]
+                    .value_counts()
+                    .reindex([ra1, ra2], fill_value=0)
                 )
 
-                tabela_comparacao = tabela_comparacao.reindex(
-                    index=["Masculino", "Feminino"],
-                    fill_value=0
-                )
-
-                tabela_comparacao = tabela_comparacao.reindex(
-                    columns=[ra1, ra2],
-                    fill_value=0
-                )
-
-                tabela_comparacao.plot(kind="bar", ax=eixo)
-
-                eixo.set_title(f"Comparação entre {ra1} e {ra2} por sexo")
-                eixo.set_xlabel("Sexo")
+                eixo.bar(contagem_ras.index, contagem_ras.values)
+                eixo.set_title(f"Comparação entre {ra1} e {ra2}")
+                eixo.set_xlabel("Região Administrativa")
                 eixo.set_ylabel("Quantidade de pessoas ocupadas")
-                eixo.legend(title="RA")
                 eixo.tick_params(axis="x", rotation=0)
 
     figura.tight_layout()
